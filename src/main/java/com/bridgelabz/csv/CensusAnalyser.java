@@ -2,6 +2,7 @@ package com.bridgelabz.csv;
 
 import com.bridgelabz.csv.exception.CensusAnalyserException;
 import com.bridgelabz.csv.pojo.IndiaCensusCSV;
+import com.bridgelabz.csv.pojo.IndiaStateCode;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
@@ -44,4 +45,33 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.INVALID_DATA);
         }
     }
+
+    public int loadIndianStateData(String csvFilePath) {
+        try {
+            Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+            CsvToBeanBuilder<IndiaStateCode> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+            csvToBeanBuilder.withType(IndiaStateCode.class);
+            csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
+            CsvToBean<IndiaStateCode> csvToBean = csvToBeanBuilder.build();
+            Iterator<IndiaStateCode> censusCSVIterator = csvToBean.iterator();;
+            int namOfEateries = 0;
+            List <IndiaStateCode> csvData = new ArrayList<>();
+            while (censusCSVIterator.hasNext()) {
+                namOfEateries++;
+                IndiaStateCode censusData = censusCSVIterator.next();
+                csvData.add(censusData);
+            }
+            System.out.println(csvData);
+            return namOfEateries;
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+
+        }
+        catch (RuntimeException e){
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.INVALID_DATA);
+        }
+    }
+
 }

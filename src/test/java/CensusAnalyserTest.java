@@ -11,12 +11,19 @@ public class CensusAnalyserTest {
     private static final String WRONG_CSV_FILE_TYPE="./src/main/resources/IndiaStateCensusData.txt";
     private static final String WRONG_CSV_FILE_DELIMITER="./src/test/resources/delimeter.csv";
     private static final String CSV_FILE_INVALID_HEADER="./src/test/resources/InvalidHeader.csv";
+    private static final String INDIA_STATECODE_CSV_FILE_PATH = "./src/test/resources/IndiaStateCode.csv";
+    private static final String WRONG_INDIAN_STATECODE_CSV_FILE_PATH = "./src/main/resources/IndiaStateCode.csv";
+    private static final String WRONG_INDIAN_STATECODE_CSV_FILE_TYPE="./src/main/resources/IndiaStateCode.txt";
+    private static final String WRONG_CSV_FILE_DELIMITER="./src/test/resources/delimeter.csv";
+    private static final String CSV_FILE_INVALID_HEADER="./src/test/resources/InvalidHeader.csv";
+
     @Test
     public void givenCsvFilePathShouldReturnProperRecods() {
         CensusAnalyser csvStateCensus = new CensusAnalyser();
         int list = csvStateCensus.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH);
         Assert.assertEquals(29,list);
     }
+
     @Test
     public void givenIndiaCensusData_WithWrongFile_ShouldThrowException() {
         try {
@@ -40,6 +47,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
         }
     }
+
     @Test
     public void givenIndiaCensusData_WithWrongFileData_ShouldThrowException() {
         try {
@@ -51,6 +59,7 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_DATA,e.type);
         }
     }
+
     @Test
     public void givenIndiaCensusData_WithWrongFileHeader_ShouldThrowException() {
         try {
@@ -62,4 +71,13 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_DATA,e.type);
         }
     }
+
+    @Test
+    public void givenIndianStateCodeCsvFilePath_ShouldReturnProperRecords() {
+        CensusAnalyser csvStateCensus = new CensusAnalyser();
+        int list = csvStateCensus.loadIndianStateData(INDIA_STATECODE_CSV_FILE_PATH);
+        Assert.assertEquals(37,list);
+    }
+
+
 }
