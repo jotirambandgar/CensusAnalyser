@@ -23,31 +23,35 @@ public class CensusAnalyser {
 
         try(Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
 
-
             Iterator<IndiaCensusCSV> censusCSVIterator = this.getIterator(reader, IndiaCensusCSV.class);
-            Iterable<IndiaCensusCSV> censusCSVIterable = ()-> censusCSVIterator;
-            int numOfEnteries = (int) StreamSupport.stream(censusCSVIterable.spliterator(),false).count();
+            int numOfEnteries = this.getCount(censusCSVIterator);
             return numOfEnteries;
 
         } catch (IOException e) {
+
                 throw new CensusAnalyserException(e.getMessage(),
                         CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
 
         }
         catch (RuntimeException e){
+
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.INVALID_DATA);
+
         }
 
     }
 
     public int loadIndianStateData(String csvFilePath) {
+
         try(Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-            Iterator<IndiaStateCode> CsvIterator = this.getIterator(reader,IndiaStateCode.class);
-            Iterable<IndiaStateCode> stateCodesCSVIterable = ()-> CsvIterator;
-            int numOfEnteries = (int) StreamSupport.stream(stateCodesCSVIterable.spliterator(),false).count();
+
+            Iterator<IndiaStateCode> csvIterator = this.getIterator(reader,IndiaStateCode.class);
+            int numOfEnteries = this.getCount(csvIterator);
             return numOfEnteries;
+
         } catch (IOException e) {
+
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
 
@@ -68,6 +72,14 @@ public class CensusAnalyser {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.INVALID_DATA);
         }
+    }
+
+    private <E> int getCount(Iterator<E> iterator) {
+
+        Iterable<E> CSVIterable = ()-> iterator;
+        int numOfEnteries = (int) StreamSupport.stream(CSVIterable.spliterator(),false).count();
+        return numOfEnteries;
+
     }
 
 }
