@@ -1,16 +1,16 @@
 package com.bridgelabz.csv;
 
 import com.bridgelabz.csv.exception.CensusAnalyserException;
-import com.bridgelabz.csv.pojo.IndiaCensusCSV;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.Reader;
 import java.util.Iterator;
 
-public class OpenCsvBuilder {
+public class OpenCsvBuilderImpl implements IOpenCsvBuilder {
 
-    public <E> Iterator<E> getIterator(Reader reader, Class<E> csvClass) {
+
+    public <E> Iterator<E> getIterator(Reader reader, Class<E> csvClass)  {
 
         try {
             CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
