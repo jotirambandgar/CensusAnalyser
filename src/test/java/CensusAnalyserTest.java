@@ -14,8 +14,8 @@ public class CensusAnalyserTest {
     private static final String INDIA_STATECODE_CSV_FILE_PATH = "./src/test/resources/IndiaStateCode.csv";
     private static final String WRONG_INDIAN_STATECODE_CSV_FILE_PATH = "./src/main/resources/IndiaStateCode.csv";
     private static final String WRONG_INDIAN_STATECODE_CSV_FILE_TYPE="./src/main/resources/IndiaStateCode.txt";
-    private static final String WRONG_CSV_FILE_DELIMITER="./src/test/resources/delimeter.csv";
-    private static final String CSV_FILE_INVALID_HEADER="./src/test/resources/InvalidHeader.csv";
+    private static final String WRONG_ISC_CSV_FILE_DELIMITER="./src/test/resources/IscDelimiter.csv";
+    private static final String WRONG_ISC_CSV_FILE_INVALID_HEADER="./src/test/resources/IscHeader.csv";
 
     @Test
     public void givenCsvFilePathShouldReturnProperRecods() {
@@ -78,6 +78,57 @@ public class CensusAnalyserTest {
         int list = csvStateCensus.loadIndianStateData(INDIA_STATECODE_CSV_FILE_PATH);
         Assert.assertEquals(37,list);
     }
+
+    @Test
+    public void givenIndianStateData_WithWrongFilePath_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadCensusData(WRONG_INDIAN_STATECODE_CSV_FILE_PATH);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
+        }
+    }
+
+    @Test
+    public void givenIndiaStateCodeData_WithWrongFileType_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndianStateData(WRONG_INDIAN_STATECODE_CSV_FILE_TYPE);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
+        }
+    }
+
+    @Test
+    public void givenIndiaStateCodeData_WithWrongFileData_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndianStateData(WRONG_ISC_CSV_FILE_DELIMITER);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_DATA,e.type);
+        }
+    }
+
+    @Test
+    public void givenIndiaStateCodeData_WithWrongFileHeader_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadCensusData(WRONG_ISC_CSV_FILE_INVALID_HEADER);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.INVALID_DATA,e.type);
+        }
+    }
+
+
+
 
 
 }
