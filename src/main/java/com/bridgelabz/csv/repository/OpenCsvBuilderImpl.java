@@ -1,7 +1,5 @@
-package com.bridgelabz.csv;
+package com.bridgelabz.csv.repository;
 
-import com.bridgelabz.csv.exception.AnalyserException;
-import com.bridgelabz.csv.exception.CSVBuilderException;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 

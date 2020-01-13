@@ -6,7 +6,8 @@ public class AnalyserException extends RuntimeException {
 
     public enum ExceptionType {
         CENSUS_FILE_PROBLEM,
-         INVALID_DATA
+         INVALID_DATA,
+        NO_CENSUS_DATA;
     }
 
     public ExceptionType type;

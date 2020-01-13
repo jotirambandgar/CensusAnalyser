@@ -1,4 +1,4 @@
-package com.bridgelabz.csv.pojo;
+package com.bridgelabz.csv.model;
 
 import com.opencsv.bean.CsvBindByName;
 
