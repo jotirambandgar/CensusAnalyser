@@ -5,8 +5,9 @@ import com.blsolution.factory.CSVBuilderFactory;
 import com.blsolution.repository.IOpenCsvBuilder;
 import com.bridgelabz.csv.exception.AnalyserException;
 import com.bridgelabz.csv.model.IndiaCensusCSV;
-import com.bridgelabz.csv.model.IndiaCensusCSVDao;
+import com.bridgelabz.csv.model.CensusCSVDao;
 import com.bridgelabz.csv.model.IndiaStateCode;
+import com.bridgelabz.csv.model.USCensusCSV;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.Reader;
@@ -20,7 +21,7 @@ import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
 
-    List<IndiaCensusCSVDao> censusCSVList = null;
+    List<CensusCSVDao> censusCSVList = null;
 
     public CensusAnalyser() {
         this.censusCSVList = new ArrayList<>();
@@ -32,7 +33,7 @@ public class CensusAnalyser {
             IOpenCsvBuilder csvBuilder=  CSVBuilderFactory.createCSVBuilder();
             Iterator<IndiaCensusCSV> iterator = csvBuilder.getIterator(reader, IndiaCensusCSV.class);
             Iterable<IndiaCensusCSV> iterable = () -> iterator;
-            StreamSupport.stream(iterable.spliterator(),false).forEach(indianCensus -> censusCSVList.add(new IndiaCensusCSVDao(indianCensus)));
+            StreamSupport.stream(iterable.spliterator(),false).forEach(indianCensus -> censusCSVList.add(new CensusCSVDao(indianCensus)));
             return censusCSVList.size();
 
         } catch (IOException e) {
@@ -117,4 +118,29 @@ public class CensusAnalyser {
     }
 
 
+    public int loadUSCensusData(String usCensusCsvFilePath) {
+        try(Reader reader = Files.newBufferedReader(Paths.get(usCensusCsvFilePath))) {
+            IOpenCsvBuilder csvBuilder=  CSVBuilderFactory.createCSVBuilder();
+            Iterator<USCensusCSV> iterator = csvBuilder.getIterator(reader, USCensusCSV.class);
+            Iterable<USCensusCSV> iterable = () -> iterator;
+            StreamSupport.stream(iterable.spliterator(),false).forEach(UsCensus -> censusCSVList.add(new CensusCSVDao(UsCensus)));
+            return censusCSVList.size();
+
+        } catch (IOException e) {
+
+            throw new AnalyserException(e.getMessage(),
+                    AnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+
+        } catch (CSVBuilderException e){
+
+            throw new AnalyserException(e.getMessage(),
+                    e.type.name());
+
+        } catch (RuntimeException e){
+
+            throw new AnalyserException(e.getMessage(),
+                    AnalyserException.ExceptionType.INVALID_DATA);
+        }
+
+    }
 }
