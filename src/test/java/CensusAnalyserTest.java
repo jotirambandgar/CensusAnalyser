@@ -9,7 +9,6 @@ import org.junit.rules.ExpectedException;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class CensusAnalyserTest {
 
@@ -27,7 +26,7 @@ public class CensusAnalyserTest {
     @Test
     public void givenCsvFilePathShouldReturnProperRecods() {
         CensusAnalyser csvStateCensus = new CensusAnalyser();
-        int count = csvStateCensus.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+        int count = csvStateCensus.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
         Assert.assertEquals(29,count);
     }
 
@@ -37,7 +36,7 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(AnalyserException.class);
-            censusAnalyser.loadCensusData(WRONG_CSV_FILE_PATH);
+            censusAnalyser.loadIndiaCensusData(WRONG_CSV_FILE_PATH);
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
         }
@@ -49,7 +48,7 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(AnalyserException.class);
-            censusAnalyser.loadCensusData(WRONG_CSV_FILE_TYPE);
+            censusAnalyser.loadIndiaCensusData(WRONG_CSV_FILE_TYPE);
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
         }
@@ -59,7 +58,7 @@ public class CensusAnalyserTest {
     public void givenIndiaCensusData_WithWrongFileData_ShouldThrowException() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
-            censusAnalyser.loadCensusData(WRONG_CSV_FILE_DELIMITER);
+            censusAnalyser.loadIndiaCensusData(WRONG_CSV_FILE_DELIMITER);
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.INVALID_DATA,e.type);
         }
@@ -71,7 +70,7 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(AnalyserException.class);
-            censusAnalyser.loadCensusData(CSV_FILE_INVALID_HEADER);
+            censusAnalyser.loadIndiaCensusData(CSV_FILE_INVALID_HEADER);
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.INVALID_DATA,e.type);
         }
@@ -90,7 +89,7 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(AnalyserException.class);
-            censusAnalyser.loadCensusData(WRONG_INDIAN_STATECODE_CSV_FILE_PATH);
+            censusAnalyser.loadIndiaCensusData(WRONG_INDIAN_STATECODE_CSV_FILE_PATH);
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.CENSUS_FILE_PROBLEM,e.type);
         }
@@ -126,7 +125,7 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(AnalyserException.class);
-            censusAnalyser.loadCensusData(WRONG_ISC_CSV_FILE_INVALID_HEADER);
+            censusAnalyser.loadIndiaCensusData(WRONG_ISC_CSV_FILE_INVALID_HEADER);
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.INVALID_DATA,e.type);
         }
@@ -136,7 +135,7 @@ public class CensusAnalyserTest {
     public void whenGivenCensusData_WhenSortedOnState_ShouldReturnSortedResult() {
 
         CensusAnalyser censusAnalyser = new CensusAnalyser();
-        censusAnalyser.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+        censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
         String sortedData = censusAnalyser.sortCensusDataStateWise();
         Type indianCsvType = new TypeToken<LinkedHashMap<String, IndiaCensusCSV>>() {}.getType();
         LinkedHashMap<String ,IndiaCensusCSV> sortedCsvData = new Gson().fromJson(sortedData, indianCsvType);
@@ -149,7 +148,7 @@ public class CensusAnalyserTest {
     public void whenFailedToStoreData_WhenSortedOnState_ShouldThrowException() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
-            censusAnalyser.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
             String sortedData = censusAnalyser.sortCensusDataStateWise();
             Type indianCsvType = new TypeToken<LinkedHashMap<String, IndiaCensusCSV>>() {}.getType();
             LinkedHashMap<String ,IndiaCensusCSV> sortedCsvData = new Gson().fromJson(sortedData, indianCsvType);
