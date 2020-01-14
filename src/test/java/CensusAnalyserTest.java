@@ -1,6 +1,6 @@
 import com.bridgelabz.csv.CensusAnalyser;
 import com.bridgelabz.csv.exception.AnalyserException;
-import com.bridgelabz.csv.pojo.IndiaCensusCSV;
+import com.bridgelabz.csv.model.IndiaCensusCSV;
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Test;

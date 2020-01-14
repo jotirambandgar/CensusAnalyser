@@ -13,4 +13,15 @@ public class IndiaCensusCSVDao {
         densityPerSqKm = censusCSV.densityPerSqKm;
         population = censusCSV.population;
     }
+
+    @Override
+    public String toString() {
+        return "IndiaCensusCSVDao{" +
+                "state='" + state + '\'' +
+                ", areaInSqKm=" + areaInSqKm +
+                ", densityPerSqKm=" + densityPerSqKm +
+                ", population=" + population +
+                '}';
+    }
+
 }
