@@ -2,9 +2,14 @@ import com.bridgelabz.csv.CensusAnalyser;
 import com.bridgelabz.csv.exception.AnalyserException;
 import com.bridgelabz.csv.model.IndiaCensusCSV;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.lang.reflect.Type;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class CensusAnalyserTest {
 
@@ -129,11 +134,15 @@ public class CensusAnalyserTest {
 
     @Test
     public void whenGivenCensusData_WhenSortedOnState_ShouldReturnSortedResult() {
+
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         censusAnalyser.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH);
         String sortedData = censusAnalyser.sortCensusDataStateWise();
-        IndiaCensusCSV[] indiaCensusCSVS = new Gson().fromJson(sortedData, IndiaCensusCSV[].class);
-        Assert.assertEquals("Andhra Pradesh",indiaCensusCSVS[0].state);
+        Type indianCsvType = new TypeToken<LinkedHashMap<String, IndiaCensusCSV>>() {}.getType();
+        LinkedHashMap<String ,IndiaCensusCSV> sortedCsvData = new Gson().fromJson(sortedData, indianCsvType);
+        String firstState =  (String) sortedCsvData.keySet().toArray()[0];
+        Assert.assertEquals("Andhra Pradesh", firstState);
+
     }
 
     @Test
@@ -142,8 +151,11 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             censusAnalyser.loadCensusData(INDIA_CENSUS_CSV_FILE_PATH);
             String sortedData = censusAnalyser.sortCensusDataStateWise();
-            IndiaCensusCSV[] indiaCensusCSVS = new Gson().fromJson(sortedData, IndiaCensusCSV[].class);
-            Assert.assertEquals("Andhra Pradesh", indiaCensusCSVS[0].state);
+            Type indianCsvType = new TypeToken<LinkedHashMap<String, IndiaCensusCSV>>() {}.getType();
+            LinkedHashMap<String ,IndiaCensusCSV> sortedCsvData = new Gson().fromJson(sortedData, indianCsvType);
+            String firstState =  (String) sortedCsvData.keySet().toArray()[0];
+            Assert.assertEquals("Andhra Pradesh", firstState);
+
         } catch (AnalyserException e){
             Assert.assertEquals(AnalyserException.ExceptionType.NO_CENSUS_DATA,e.type);
         }
@@ -152,6 +164,7 @@ public class CensusAnalyserTest {
 
     @Test
     public void givenUSCensusData_ShouldReturnCorrectRecords() {
+
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         int censusDataCount = censusAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
         Assert.assertEquals(51,censusDataCount);
