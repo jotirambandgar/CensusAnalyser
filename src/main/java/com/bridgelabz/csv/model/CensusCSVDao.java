@@ -3,6 +3,7 @@ package com.bridgelabz.csv.model;
 public class CensusCSVDao {
 
     public String state;
+    public String stateCode;
     public double totalArea;
     public double populationDensity;
     public double population;
@@ -19,10 +20,13 @@ public class CensusCSVDao {
     public CensusCSVDao(USCensusCSV usCensusCSV) {
 
         state = usCensusCSV.stateName;
+        stateCode=usCensusCSV.stateId;
         totalArea = usCensusCSV.totalArea;
         populationDensity =usCensusCSV.populationDensity;
         population = usCensusCSV.population;
+
     }
+
 
     @Override
     public String toString() {
