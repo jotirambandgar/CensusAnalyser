@@ -68,6 +68,7 @@ public class CensusAnalyserTest {
 
     @Test
     public void givenIndiaCensusData_WithWrongFileHeader_ShouldThrowException() {
+
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
@@ -76,6 +77,7 @@ public class CensusAnalyserTest {
         } catch (AnalyserException e) {
             Assert.assertEquals(AnalyserException.ExceptionType.INVALID_DATA,e.type);
         }
+
     }
 
 
@@ -124,9 +126,8 @@ public class CensusAnalyserTest {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_CENSUS_CSV_FILE_PATH);
             String sortedData = censusAnalyser.sortCensusDataStateWise();
-            Type indianCsvType = new TypeToken<LinkedHashMap<String, IndiaCensusCSV>>() {}.getType();
-            LinkedHashMap<String ,IndiaCensusCSV> sortedCsvData = new Gson().fromJson(sortedData, indianCsvType);
-            String firstState =  (String) sortedCsvData.keySet().toArray()[0];
+            IndiaCensusCSV[] sortedCsvData = new Gson().fromJson(sortedData, IndiaCensusCSV[].class);
+            String firstState =   sortedCsvData[0].state;
             Assert.assertEquals("Andhra Pradesh", firstState);
 
         } catch (AnalyserException e){
@@ -149,7 +150,23 @@ public class CensusAnalyserTest {
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_CENSUS_CSV_FILE_PATH
                                                                 ,INDIA_STATECODE_CSV_FILE_PATH);
-        List<CensusCSVDao> reversePopulated = censusAnalyser.sortBasedOnPopulation();
-        Assert.assertEquals(1.99812341E8,reversePopulated.get(0).population,1.0);
+        String reversePopulated = censusAnalyser.sortCensusDataPopulationWise();
+        IndiaCensusCSV[] sortedCsvData = new Gson().fromJson(reversePopulated, IndiaCensusCSV[].class);
+        System.out.println(sortedCsvData.length);
+        double mostPopulated =   sortedCsvData[0].population;
+        Assert.assertEquals(1.99812341E8,mostPopulated,1.0);
+    }
+
+    @Test
+    public void givenIndiaCensusData_ShouldReturnDescendingOrderBaseOnPopuDensity() {
+
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_CENSUS_CSV_FILE_PATH
+                ,INDIA_STATECODE_CSV_FILE_PATH);
+        String reversePopulated = censusAnalyser.sortPopulationDensityInDescendingOrder();
+        IndiaCensusCSV[] sortedCsvData = new Gson().fromJson(reversePopulated, IndiaCensusCSV[].class);
+        String mostPopDensityState =sortedCsvData[0].state;
+        Assert.assertEquals("Bihar",mostPopDensityState);
+
     }
 }

@@ -2,26 +2,25 @@ package com.bridgelabz.csv;
 
 import com.blsolution.exception.CSVBuilderException;
 import com.bridgelabz.csv.exception.AnalyserException;
+import com.bridgelabz.csv.factory.CensusAdapterFactory;
 import com.bridgelabz.csv.model.*;
-import com.bridgelabz.csv.service.CsvLoader;
 import com.google.gson.Gson;
-
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
 
-    public enum Country{ INDIA,US}
+    public enum Country{ INDIA,US;
+    }
 
     Map<String,CensusCSVDao> censusCSVMap = null;
-    CsvLoader csvLoader = null;
+
 
     public CensusAnalyser() {
 
         this.censusCSVMap = new HashMap<>();
-        csvLoader = new CsvLoader();
+
 
     }
 
@@ -29,7 +28,7 @@ public class CensusAnalyser {
 
     public int loadCensusData(Country country,String... csvFilePath) {
 
-       censusCSVMap = csvLoader.getCensusData(country,csvFilePath);
+       censusCSVMap = CensusAdapterFactory.getCensusData(country,csvFilePath);
        return censusCSVMap.size();
 
     }
@@ -54,27 +53,44 @@ public class CensusAnalyser {
                 throw new AnalyserException("No Census Data",
                         AnalyserException.ExceptionType.NO_CENSUS_DATA);
             }
-            censusCSVMap = this.sortBaseOnStateName();
-            return new Gson().toJson(censusCSVMap);
+            List<CensusCSVDao> sortedData =  this.sortBaseOnStateName();
+            return new Gson().toJson(sortedData);
+
+    }
+    public String sortCensusDataPopulationWise() {
+
+        if (censusCSVMap.size() == 0 || censusCSVMap == null){
+            throw new AnalyserException("No Census Data",
+                    AnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        String sortedData =  this.sortBasedOnPopulation();
+        return sortedData;
 
     }
 
 
-    private  Map sortBaseOnStateName(){
 
-            return censusCSVMap.entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,
-                            (oldValue,newValue)->newValue,
-                            LinkedHashMap::new));
+    private  List<CensusCSVDao> sortBaseOnStateName(){
+
+            return censusCSVMap.values().stream().sorted((census1,census2)-> census1.
+                    state.compareTo(census2.state)).collect(Collectors.toList());
 
     }
 
-    public List<CensusCSVDao> sortBasedOnPopulation(){
+    public String sortBasedOnPopulation(){
 
-       return censusCSVMap.values().stream().sorted((census1,census2)-> (int) (census2.population-census1.population))
-                .collect(Collectors.toList());
+       List censusDto= censusCSVMap.values().stream().sorted((census1,census2)-> (int) (census2.population-census1.population))
+                .map(censusCSVDao -> censusCSVDao.getCensusDto(Country.INDIA)).collect(Collectors.toList());
 
+       return new Gson().toJson(censusDto);
+
+    }
+
+    public String sortPopulationDensityInDescendingOrder() {
+        List censusDto= censusCSVMap.values().stream().sorted((census1,census2)-> (int) (census2.populationDensity-census1.populationDensity))
+                .map(censusCSVDao -> censusCSVDao.getCensusDto(Country.INDIA)).collect(Collectors.toList());
+        System.out.println(censusDto.stream());
+        return new Gson().toJson(censusDto);
     }
 
 
