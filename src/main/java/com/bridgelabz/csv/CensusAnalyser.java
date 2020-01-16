@@ -86,13 +86,24 @@ public class CensusAnalyser {
 
     }
 
-    public String sortPopulationDensityInDescendingOrder() {
+    public String sortPopulationDensityWiseInDescendingOrder() {
         List censusDto= censusCSVMap.values().stream().sorted((census1,census2)-> (int) (census2.populationDensity-census1.populationDensity))
                 .map(censusCSVDao -> censusCSVDao.getCensusDto(Country.INDIA)).collect(Collectors.toList());
         System.out.println(censusDto.stream());
         return new Gson().toJson(censusDto);
     }
 
+    public String sortTotalAreaWiseInDescendingOrder() {
+
+        List censusDto= censusCSVMap.values().
+                        stream().sorted((census1,census2)->
+                                        (int) (census2.totalArea-census1.totalArea))
+                                        .map(censusCSVDao -> censusCSVDao.getCensusDto(Country.INDIA))
+                                        .collect(Collectors.toList());
+        System.out.println(censusDto);
+        return new Gson().toJson(censusDto);
+
+    }
 
 
 }

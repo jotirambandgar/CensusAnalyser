@@ -1,6 +1,5 @@
 import com.bridgelabz.csv.CensusAnalyser;
 import com.bridgelabz.csv.exception.AnalyserException;
-import com.bridgelabz.csv.model.CensusCSVDao;
 import com.bridgelabz.csv.model.IndiaCensusCSV;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,7 +9,6 @@ import org.junit.rules.ExpectedException;
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class CensusAnalyserTest {
 
@@ -158,15 +156,26 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenIndiaCensusData_ShouldReturnDescendingOrderBaseOnPopuDensity() {
+    public void givenIndiaCensusData_ShouldReturnInDescendingOrderBaseOnPopuDensity() {
 
         CensusAnalyser censusAnalyser = new CensusAnalyser();
         censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_CENSUS_CSV_FILE_PATH
                 ,INDIA_STATECODE_CSV_FILE_PATH);
-        String reversePopulated = censusAnalyser.sortPopulationDensityInDescendingOrder();
+        String reversePopulated = censusAnalyser.sortPopulationDensityWiseInDescendingOrder();
         IndiaCensusCSV[] sortedCsvData = new Gson().fromJson(reversePopulated, IndiaCensusCSV[].class);
         String mostPopDensityState =sortedCsvData[0].state;
         Assert.assertEquals("Bihar",mostPopDensityState);
 
+    }
+
+    @Test
+    public void givenIndiaCensusData_SholdReturnReturnDescendingOriderBaseOnArea() {
+
+        CensusAnalyser censusAnalyser = new CensusAnalyser();
+        censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_CENSUS_CSV_FILE_PATH
+                ,INDIA_STATECODE_CSV_FILE_PATH);
+        String reversePopulated = censusAnalyser.sortTotalAreaWiseInDescendingOrder();
+        IndiaCensusCSV[] sortedCsvData = new Gson().fromJson(reversePopulated, IndiaCensusCSV[].class);
+        Assert.assertEquals("Rajasthan",sortedCsvData[0].state);
     }
 }
