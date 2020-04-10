@@ -3,10 +3,9 @@ package com.bridgelabz.csv.factory;
 import com.bridgelabz.csv.CensusAnalyser;
 import com.bridgelabz.csv.exception.AnalyserException;
 import com.bridgelabz.csv.model.CensusCSVDao;
-import com.bridgelabz.csv.service.IndiaCensusAdapter;
-import com.bridgelabz.csv.service.USCensusAdapter;
+import com.bridgelabz.csv.adapter.IndiaCensusAdapter;
+import com.bridgelabz.csv.adapter.USCensusAdapter;
 
-import java.rmi.MarshalledObject;
 import java.util.Map;
 
 public class CensusAdapterFactory {

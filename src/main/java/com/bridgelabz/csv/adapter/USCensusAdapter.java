@@ -1,4 +1,4 @@
-package com.bridgelabz.csv.service;
+package com.bridgelabz.csv.adapter;
 
 import com.bridgelabz.csv.model.CensusCSVDao;
 import com.bridgelabz.csv.model.USCensusCSV;

@@ -1,13 +1,11 @@
-package com.bridgelabz.csv.service;
+package com.bridgelabz.csv.adapter;
 
 import com.blsolution.exception.CSVBuilderException;
 import com.blsolution.factory.CSVBuilderFactory;
 import com.blsolution.repository.IOpenCsvBuilder;
-import com.bridgelabz.csv.CensusAnalyser;
 import com.bridgelabz.csv.exception.AnalyserException;
 import com.bridgelabz.csv.model.CensusCSVDao;
 import com.bridgelabz.csv.model.IndiaCensusCSV;
-import com.bridgelabz.csv.model.IndiaStateCode;
 import com.bridgelabz.csv.model.USCensusCSV;
 
 import java.io.IOException;
